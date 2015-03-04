@@ -1,25 +1,18 @@
-require 'json'
 require 'open-uri'
+require "rubygems"
+require 'pry'
+require 'nokogiri'
 
 class GetCats 
-  # format :json
+ 
 
   URL = "http://thecatapi.com/api/images/get?format=xml&results_per_page=20"
 
-  def get_url
-    @url = URL
-  end
-
-  def get_the_cats
-    cat_party = []
-    all_cats = JSON.load(open(URL))
-    binding.pry
-    all_cats.each do |cat_pic|
-      cat_party << cat_pic
-    end
-    cat_party
-
+  def scrape
+    get_cats = Nokogiri::HTML(open(URL))
+    cat_party = get_cats.css("url").children.collect  {|cat| cat.text}
   end
 
 
 end
+
